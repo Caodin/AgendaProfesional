@@ -51,10 +51,10 @@
             this.dtg_Citas.AllowUserToAddRows = false;
             this.dtg_Citas.AllowUserToDeleteRows = false;
             this.dtg_Citas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtg_Citas.Location = new System.Drawing.Point(105, 12);
+            this.dtg_Citas.Location = new System.Drawing.Point(105, 22);
             this.dtg_Citas.Name = "dtg_Citas";
             this.dtg_Citas.ReadOnly = true;
-            this.dtg_Citas.Size = new System.Drawing.Size(329, 248);
+            this.dtg_Citas.Size = new System.Drawing.Size(329, 227);
             this.dtg_Citas.TabIndex = 0;
             // 
             // btn_CitasDia
@@ -163,13 +163,13 @@
             this.txt_Observaciones.Location = new System.Drawing.Point(462, 126);
             this.txt_Observaciones.Multiline = true;
             this.txt_Observaciones.Name = "txt_Observaciones";
-            this.txt_Observaciones.Size = new System.Drawing.Size(326, 134);
+            this.txt_Observaciones.Size = new System.Drawing.Size(326, 123);
             this.txt_Observaciones.TabIndex = 15;
             // 
             // btn_Admin
             // 
             this.btn_Admin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Admin.Location = new System.Drawing.Point(12, 12);
+            this.btn_Admin.Location = new System.Drawing.Point(12, 22);
             this.btn_Admin.Name = "btn_Admin";
             this.btn_Admin.Size = new System.Drawing.Size(75, 51);
             this.btn_Admin.TabIndex = 17;
@@ -181,6 +181,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.LightBlue;
             this.ClientSize = new System.Drawing.Size(800, 393);
             this.Controls.Add(this.btn_Admin);
@@ -198,6 +199,8 @@
             this.Controls.Add(this.btn_CitasDia);
             this.Controls.Add(this.dtg_Citas);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "PantallaProfesional";
             this.Text = "PantallaProfesional";
             this.Load += new System.EventHandler(this.btn_CitasDia_Click);

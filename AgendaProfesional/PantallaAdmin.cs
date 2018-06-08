@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace AgendaProfesional
 {
-    public partial class PantallaAdmin: Form
+    public partial class PantallaAdmin : Form
     {
         AccesoBBDD acceso = new AccesoBBDD();
         Login login;
@@ -25,6 +25,34 @@ namespace AgendaProfesional
             this.id_Profesional = id_Profesional;
 
             InitializeComponent();
+
+            string query = "select ID_paciente as idPaciente, concat(nombre , ' ' , apellidos) as nombrePaciente from dbo.pacientes";
+            SqlCommand command= new SqlCommand(query, acceso.getConnection());
+            //Mostrarlos en la grid
+            try
+            {
+                //Abrir la conexión
+                acceso.conectar();
+                //Ejecutar comando
+                SqlDataReader dr = command.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(dr);
+
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    cmb_Paciente.Items.Add(dt.Rows[i].ItemArray[1].ToString());
+                    cmb_IdPaciente.Items.Add(dt.Rows[i].ItemArray[0].ToString());
+                }
+                //Cerrar el Datareader
+                dr.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se ha podido conectar" +
+                ex.Message);
+            }            finally            {
+                acceso.desconectar();
+            }
         }
 
         private void btn_CitasDia2_Click(object sender, EventArgs e)
@@ -146,6 +174,58 @@ namespace AgendaProfesional
             finally
             {
                 acceso.desconectar();
+            }
+        }
+
+        private void btn_Atras2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            pantallaProfesional.Show();
+        }
+
+        private void btn_NuevaCita_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int id_Paciente = int.Parse(cmb_IdPaciente.Items[cmb_Paciente.SelectedIndex].ToString());
+                string fecha = dtp_fecha.Value.ToString();
+                string observaciones = txt_Observaciones.Text;
+
+                if (fecha != null && fecha != "" && observaciones != null)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("[dbo].[sp_NuevaCita]", acceso.getConnection());
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("@idPa", SqlDbType.Int));
+                    sqlCommand.Parameters.Add(new SqlParameter("@idPro", SqlDbType.Int));
+                    sqlCommand.Parameters.Add(new SqlParameter("@ci", SqlDbType.DateTime));
+                    sqlCommand.Parameters.Add(new SqlParameter("@ob", SqlDbType.VarChar, 200));
+                    sqlCommand.Parameters["@idPa"].Value = id_Paciente;
+                    sqlCommand.Parameters["@idPro"].Value = id_Profesional;
+                    sqlCommand.Parameters["@ci"].Value = new DateTimeConverter().ConvertFromString(fecha);
+                    sqlCommand.Parameters["@ob"].Value = observaciones;
+                    try
+                    {
+                        acceso.conectar();
+
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("No se ha podido conectar: " + ex.Message);
+                    }
+                    finally
+                    {
+                        acceso.desconectar();
+
+                        btn_CitasDia2.PerformClick();
+                    }
+                }
+                else
+                    throw new Exception();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Debes escoger valores antes de introducir una fecha");
             }
         }
     }
